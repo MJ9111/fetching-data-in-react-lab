@@ -1,34 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 
-const StarshipSearch = ({ setStarships }) => {
-  const [search, setSearch] = useState('');
+const StarshipSearch = ({ onSearch }) => {
+    const [searchQuery, setSearchQuery] = useState('');
 
-  const handleChange = (e) => {
-    setSearch(e.target.value);
-  };
+    const handleSearch = (e) => {
+        e.preventDefault();
+        onSearch(searchQuery);
+        setSearchQuery('');
+    };
 
-  useEffect(() => {
-    fetch(`https://swapi.dev/api/starships/?search=${search}`)
-      .then((res) => res.json())
-      .then((data) => setStarships(data.results));
-  }, [search]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const searchTerm = search; 
-  };
-  
-  return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        placeholder="Search for a starship"
-        value={search}
-        onChange={handleChange}
-      />
-      <button type='submit'>search</button>
-    </form> 
-  );
+    return (
+        <div>
+            <h2>Search</h2>
+            <form onSubmit={handleSearch}>
+                <label htmlFor="searchQuery">Search Term:</label>
+                <input
+                    id="searchQuery"
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <button type="submit">Search</button>
+            </form>
+        </div>
+    );
 };
 
 export default StarshipSearch;

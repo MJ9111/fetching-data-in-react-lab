@@ -1,25 +1,40 @@
-import React from 'react';
-import StarshipList from './components/StarshipList';
+import { useState, useEffect } from 'react';
+import { showStarships } from './services/starshipService';
 import StarshipSearch from './components/StarshipSearch';
-import { useState } from 'react';
+import StarshipList from './components/StarshipList';
 import './App.css';
-import StarshipCard from './components/StarshipCard';
+
 const App = () => {
-const [starships, setStarships] = useState([]);
-const [search, setSearch] = useState('');
+  const [starships, setStarships] = useState([]);
+  const [filteredStarships, setFilteredStarships] = useState([]);
 
-const handleChange = (e) => {
-  setSearch(e.target.value);
-}
-const filteredStarships = starships.filter((starship) =>
-  starship.name.toLowerCase().includes(search.toLowerCase())
-);
+  useEffect(() => {
+    const fetchStarships = async () => {
+      const data = await showStarships();
+      setStarships(data.results || []);
+      setFilteredStarships(data);
+    };
+    fetchStarships();
+  }, []);
+
+  const handleSearch = (query) => {
+    const filtered = starships.filter((s) =>
+      s.name.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredStarships(filtered);
+  };
+
   return (
-    <div>
-      <StarshipSearch setStarships={setStarships} />
-      <StarshipList starships={filteredStarships} />
-    </div>
+    <main>
+      <h1>Star Wars API</h1>
+      <StarshipSearch onSearch={handleSearch} />
+      {starships.length === 0 ? (
+        <p>Loading...</p>
+      ) : (
+        <StarshipList starships={filteredStarships} />
+      )}
+    </main>
   );
-}
+};
 
-export default App
+export default App;

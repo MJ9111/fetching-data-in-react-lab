@@ -1,14 +1,12 @@
-// StarshipCard.js
-import React from 'react';
 
 const StarshipCard = ({ starship }) => {
   return (
-    <div className="starship-card">
+    <li>
       <h3>{starship.name}</h3>
-      <p><strong>Class:</strong> {starship.class}</p>
-      <p><strong>Manufacturer:</strong> {starship.manufacturer}</p>
-      <p><strong>Model:</strong> {starship.model}</p>
-    </div>
+      <p>Class: {starship.starship_class}</p>
+      <p>Manufacturer: {starship.manufacturer}</p>
+      <p>Model: {starship.model}</p>
+    </li>
   );
 };
 
